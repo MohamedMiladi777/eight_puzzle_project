@@ -153,39 +153,69 @@ def tinyMazeSearch(problem):
 #             #mark current node as explored
 #             exploredNodes.append(currentState)
 ################Debugging, DFS TOO SLOW################
-def depthFirstSearch(problem):
-    #states to be explored (LIFO). holds nodes in form (state, action)
+# def depthFirstSearch(problem):
+#     #states to be explored (LIFO). holds nodes in form (state, action)
+#     frontier = util.Stack()
+#     #previously explored states (for path checking), holds states
+#     exploredNodes = set()  # Change this line
+#     #define start node
+#     startState = problem.getStartState()
+#     startNode = (startState, [])
+#
+#     frontier.push(startNode)
+#
+#     while not frontier.isEmpty():
+#     #begin exploring last (most-recently-pushed) node on frontier
+#         currentState, actions = frontier.pop()
+#
+#         if currentState not in exploredNodes:
+#         #mark current node as explored
+#                             exploredNodes.add(currentState)  # And this line
+#
+#         if problem.isGoalState(currentState):
+#             return actions
+#         else:
+#                 #get list of possible successor nodes in
+#                 #form (successor, action, stepCost)
+#                 successors = problem.getSuccessors(currentState)
+#
+#                 #push each successor to frontier
+#                 for succState, succAction, succCost in successors:
+#                     newAction = actions + [succAction]
+#                     newNode = (succState, newAction)
+#                     frontier.push(newNode)
+#
+#     return actions
+
+
+########################################Changed the DFS code to this, we limited it because it takes a long time#############################################
+def depthFirstSearch(problem, limit=10000):
     frontier = util.Stack()
-    #previously explored states (for path checking), holds states
-    exploredNodes = set()  # Change this line
-    #define start node
+    exploredNodes = set()
+
     startState = problem.getStartState()
-    startNode = (startState, [])
+    startNode = (startState, [], 0)  # Add depth information
 
     frontier.push(startNode)
 
     while not frontier.isEmpty():
-    #begin exploring last (most-recently-pushed) node on frontier
-        currentState, actions = frontier.pop()
+        currentState, actions, depth = frontier.pop()  # Get depth information
 
-        if currentState not in exploredNodes:
-        #mark current node as explored
-                            exploredNodes.add(currentState)  # And this line
+        if currentState not in exploredNodes and depth <= limit:  # Check the depth
+            exploredNodes.add(currentState)
 
-        if problem.isGoalState(currentState):
-            return actions
-        else:
-                #get list of possible successor nodes in 
-                #form (successor, action, stepCost)
+            if problem.isGoalState(currentState):
+                return actions
+            else:
                 successors = problem.getSuccessors(currentState)
-                
-                #push each successor to frontier
+
                 for succState, succAction, succCost in successors:
                     newAction = actions + [succAction]
-                    newNode = (succState, newAction)
+                    newNode = (succState, newAction, depth + 1)  # Increase the depth
                     frontier.push(newNode)
 
-    return actions  
+    return actions
+
 
 # def breadthFirstSearch(problem):
 #

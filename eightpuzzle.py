@@ -1,9 +1,4 @@
 import math
-from shutil import move
-
-import self
-from Scripts.eightpuzzle import EightPuzzleState
-
 import search
 import random
 # class EightPuzzleState:

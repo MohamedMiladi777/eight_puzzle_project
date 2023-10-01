@@ -3,7 +3,8 @@ import eightpuzzle as ep
 import search
 
 # Define the search strategies
-strategies = [search.uniformCostSearch, search.astar , search.dfs, search.bfs]
+strategies = [search.dfs, search.bfs, search.aStarSearch]
+    ##,search.uniformCostSearch, search.astar ]
 
 # Define the best heuristic from Task 2
 best_heuristic = ep.h1  # Replace with your best heuristic

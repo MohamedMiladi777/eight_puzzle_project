@@ -115,44 +115,176 @@
 #                 # Write the results to the CSV file
 #                 results_writer.writerow([initial_state, heuristic.__name__, depth, expanded_nodes, fringe_size])
 ######################################################
+
+
+
+
+
+
+
+# import csv
+# import eightpuzzle as ep
+# import search
+#
+# # Define the heuristics
+# heuristics = [ep.h1, ep.h2, ep.h3, ep.h4]
+#
+# # Open the scenarios file
+# with open('scenarios.csv', 'r') as scenarios_file:
+#     scenarios = csv.reader(scenarios_file)
+#
+#     # Open the results file
+#     with open('results.csv', 'w', newline='') as results_file:
+#         results_writer = csv.writer(results_file)
+#
+#         # Write the header row
+#         results_writer.writerow(['Scenario', 'Heuristic', 'Depth', 'Expanded nodes', 'Fringe size'])
+#
+#         # For each scenario
+#         for scenario in scenarios:
+#             if scenario:  # Skip empty lines
+#                 # Parse the scenario to get the initial state
+#                 initial_state = list(map(int, scenario))
+#                 print(f"Scenario: {initial_state}")  # Add this line
+#
+#                 # Create an 8-puzzle problem instance
+#                 puzzle = ep.EightPuzzleState(initial_state)
+#                 problem = ep.EightPuzzleSearchProblem(puzzle)
+#
+#                 # For each heuristic
+#                 for heuristic in heuristics:
+#                     # Solve the problem using A* search with the heuristic
+#                     actions = search.aStarSearch(problem, heuristic)
+#
+#                     # Record the results (depth, expanded nodes, fringe size)
+#                     depth = len(actions)
+#                     expanded_nodes = problem.expandedNodes
+#                     fringe_size = problem.fringeSize
+#
+#                     # Write the results to the CSV file
+#                     results_writer.writerow([initial_state, heuristic.__name__, depth, expanded_nodes, fringe_size])
+#
+#
+#
+#
+
+# import csv
+# import eightpuzzle as ep
+# import search
+# import random
+#
+# # Define the heuristics
+# heuristics = [ep.h1, ep.h2, ep.h3, ep.h4]
+#
+# def createRandomEightPuzzle(moves=100):
+#     puzzle = ep.EightPuzzleState([0,1,2,3,4,5,6,7,8])
+#     for i in range(moves):
+#         puzzle = puzzle.result(random.choice(puzzle.legalMoves()))
+#     return puzzle
+#
+# # Open the results file and scenarios file
+# with open('results.csv', 'w', newline='') as results_file, open('scenarios.csv', 'w', newline='') as scenarios_file:
+#     results_writer = csv.writer(results_file)
+#     scenarios_writer = csv.writer(scenarios_file)
+#
+#     # Write the header row
+#     results_writer.writerow(['Scenario', 'Heuristic', 'Depth', 'Expanded nodes', 'Fringe size'])
+#
+#     # Generate 20 random scenarios
+#     for _ in range(20):
+#         # Create a random 8-puzzle problem instance
+#         puzzle = createRandomEightPuzzle(25)
+#         problem = ep.EightPuzzleSearchProblem(puzzle)
+#
+#         # Get the initial state as a list
+#         initial_state = [cell for row in puzzle.cells for cell in row]
+#
+#         # Write the scenario to the scenarios file
+#         scenarios_writer.writerow(initial_state)
+#
+#         print(f"Scenario: {initial_state}")
+#
+#         # For each heuristic
+#         for heuristic in heuristics:
+#             # Solve the problem using A* search with the heuristic
+#             actions = search.aStarSearch(problem, heuristic)
+#
+#             # Record the results (depth, expanded nodes, fringe size)
+#             depth = len(actions)
+#             expanded_nodes = problem.expandedNodes
+#             fringe_size = problem.fringeSize
+#
+#             # Write the results to the CSV file
+#             results_writer.writerow([initial_state, heuristic.__name__, depth, expanded_nodes, fringe_size])
+
+
+
 import csv
 import eightpuzzle as ep
 import search
+import random
 
 # Define the heuristics
 heuristics = [ep.h1, ep.h2, ep.h3, ep.h4]
 
-# Open the scenarios file
-with open('scenarios.csv', 'r') as scenarios_file:
-    scenarios = csv.reader(scenarios_file)
+def createRandomEightPuzzle(moves=100):
+    puzzle = ep.EightPuzzleState([0,1,2,3,4,5,6,7,8])
+    for i in range(moves):
+        puzzle = puzzle.result(random.choice(puzzle.legalMoves()))
+    return puzzle
 
-    # Open the results file
-    with open('results.csv', 'w', newline='') as results_file:
-        results_writer = csv.writer(results_file)
+# Open the results file and scenarios file
+with open('results.csv', 'w', newline='') as results_file, open('scenarios.csv', 'w', newline='') as scenarios_file:
+    results_writer = csv.writer(results_file)
+    scenarios_writer = csv.writer(scenarios_file)
 
-        # Write the header row
-        results_writer.writerow(['Scenario', 'Heuristic', 'Depth', 'Expanded nodes', 'Fringe size'])
+    # Write the header row
+    results_writer.writerow(['Scenario', 'Heuristic', 'Depth', 'Expanded nodes', 'Fringe size'])
 
-        # For each scenario
-        for scenario in scenarios:
-            if scenario:  # Skip empty lines
-                # Parse the scenario to get the initial state
-                initial_state = list(map(int, scenario))
-                print(f"Scenario: {initial_state}")  # Add this line
+    # Initialize a dictionary to store the total depth, expanded nodes, and fringe size for each heuristic
+    totals = {heuristic.__name__: {'depth': 0, 'expanded_nodes': 0, 'fringe_size': 0} for heuristic in heuristics}
 
-                # Create an 8-puzzle problem instance
-                puzzle = ep.EightPuzzleState(initial_state)
-                problem = ep.EightPuzzleSearchProblem(puzzle)
+    # Generate 20 random scenarios
+    for _ in range(20):
+        # Create a random 8-puzzle problem instance
+        puzzle = createRandomEightPuzzle(25)
+        problem = ep.EightPuzzleSearchProblem(puzzle)
 
-                # For each heuristic
-                for heuristic in heuristics:
-                    # Solve the problem using A* search with the heuristic
-                    actions = search.aStarSearch(problem, heuristic)
+        # Get the initial state as a list
+        initial_state = [cell for row in puzzle.cells for cell in row]
 
-                    # Record the results (depth, expanded nodes, fringe size)
-                    depth = len(actions)
-                    expanded_nodes = problem.expandedNodes
-                    fringe_size = problem.fringeSize
+        # Write the scenario to the scenarios file
+        scenarios_writer.writerow(initial_state)
 
-                    # Write the results to the CSV file
-                    results_writer.writerow([initial_state, heuristic.__name__, depth, expanded_nodes, fringe_size])
+        print(f"Scenario: {initial_state}")
+
+        # For each heuristic
+        for heuristic in heuristics:
+            # Solve the problem using A* search with the heuristic
+            actions = search.aStarSearch(problem, heuristic)
+
+            # Record the results (depth, expanded nodes, fringe size)
+            depth = len(actions)
+            expanded_nodes = problem.expandedNodes
+            fringe_size = problem.fringeSize
+
+            # Add the results to the totals for this heuristic
+            totals[heuristic.__name__]['depth'] += depth
+            totals[heuristic.__name__]['expanded_nodes'] += expanded_nodes
+            totals[heuristic.__name__]['fringe_size'] += fringe_size
+
+            # Write the results to the CSV file
+            results_writer.writerow([initial_state, heuristic.__name__, depth, expanded_nodes, fringe_size])
+
+    # Calculate and print the average depth, expanded nodes, and fringe size for each heuristic
+    print("\nAverage results for each heuristic:")
+    for heuristic in heuristics:
+        avg_depth = totals[heuristic.__name__]['depth'] / 20.0
+        avg_expanded_nodes = totals[heuristic.__name__]['expanded_nodes'] / 20.0
+        avg_fringe_size = totals[heuristic.__name__]['fringe_size'] / 20.0
+
+        print(f"{heuristic.__name__}: Depth {avg_depth}, Expanded nodes {avg_expanded_nodes}, Fringe size {avg_fringe_size}")
+
+    # Decide on the best heuristic based on the averages
+    best_heuristic = min(heuristics, key=lambda heuristic: totals[heuristic.__name__]['depth'])
+    print(f"\nBest heuristic based on average depth: {best_heuristic.__name__}")
