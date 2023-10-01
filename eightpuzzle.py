@@ -1,130 +1,74 @@
-# eightpuzzle.py
-
-# --------------
-
-# Licensing Information:  You are free to use or extend these projects for
-
-# educational purposes provided that (1) you do not distribute or publish
-
-# solutions, (2) you retain this notice, and (3) you provide clear
-
-# attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-
-#
-
-# Attribution Information: The Pacman AI projects were developed at UC Berkeley.
-
-# The core projects and autograders were primarily created by John DeNero
-
-# (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
-
-# Student side autograding was added by Brad Miller, Nick Hay, and
-
-# Pieter Abbeel (pabbeel@cs.berkeley.edu).
-
- 
-
 import math
+from shutil import move
+
+import self
+from Scripts.eightpuzzle import EightPuzzleState
 
 import search
-
 import random
+# class EightPuzzleState:
+#
+#     def __init__( self, numbers ):
+#
+#
+#         self.cells = []
+#
+#         numbers = numbers[:] # Make a copy so as not to cause side-effects.
+#
+#         numbers.reverse()
+#
+#         for row in range( 3 ):
+#
+#             self.cells.append( [] )
+#
+#             for col in range( 3 ):
+#
+#                 if numbers:
+#
+#                     self.cells[row].append(numbers.pop())
+#
+#                 else:
+#
+#                     raise ValueError("Not enough numbers provided for the puzzle!")
+#
+#
+#
+#                 if self.cells[row][col] == 0:
+#
+#                     self.blankLocation = row, col
 
- 
-
-# Module Classes
-
- 
-
+# class EightPuzzleState:
+#     def __init__(self, numbers):
+#         if len(numbers) != 9:
+#             raise ValueError("Exactly 9 numbers must be provided for the puzzle!")
+#
+#         self.cells = []
+#         numbers = numbers[:]  # Make a copy so as not to cause side-effects.
+#
+#         for row in range(3):
+#             self.cells.append([])
+#             for col in range(3):
+#                 self.cells[row].append(numbers.pop(0))
+#
+#                 if self.cells[row][col] == 0:
+#                     self.blankLocation = row, col
 class EightPuzzleState:
-
-    """
-
-    The Eight Puzzle is described in the course textbook on
-
-    page 64.
-
- 
-
-    This class defines the mechanics of the puzzle itself.  The
-
-    task of recasting this puzzle as a search problem is left to
-
-    the EightPuzzleSearchProblem class.
-
-    """
-
- 
-
-    def __init__( self, numbers ):
-
-        """
-
-          Constructs a new eight puzzle from an ordering of numbers.
-
- 
-
-        numbers: a list of integers from 0 to 8 representing an
-
-          instance of the eight puzzle.  0 represents the blank
-
-          space.  Thus, the list
-
- 
-
-            [1, 0, 2, 3, 4, 5, 6, 7, 8]
-
- 
-
-          represents the eight puzzle:
-
-            -------------
-
-            | 1 |   | 2 |
-
-            -------------
-
-            | 3 | 4 | 5 |
-
-            -------------
-
-            | 6 | 7 | 8 |
-
-            ------------
-
- 
-
-        The configuration of the puzzle is stored in a 2-dimensional
-
-        list (a list of lists) 'cells'.
-
-        """
+    def __init__(self, numbers):
+        if len(numbers) != 9:
+            raise ValueError("Exactly 9 numbers must be provided for the puzzle!")
 
         self.cells = []
+        numbers = numbers[:]  # Make a copy so as not to cause side-effects.
 
-        numbers = numbers[:] # Make a copy so as not to cause side-effects.
+        for i in range(0, 9, 3):
+            self.cells.append(numbers[i:i+3])
 
-        numbers.reverse()
-
-        for row in range( 3 ):
-
-            self.cells.append( [] )
-
-            for col in range( 3 ):
-
-                if numbers:
-
-                    self.cells[row].append(numbers.pop())
-
-                else:
-
-                    raise ValueError("Not enough numbers provided for the puzzle!")
-
-            
-
+        # Find the location of the blank space (0)
+        for row in range(3):
+            for col in range(3):
                 if self.cells[row][col] == 0:
-
                     self.blankLocation = row, col
+
 
  
 
@@ -133,8 +77,6 @@ class EightPuzzleState:
         """
 
           Checks to see if the puzzle is in its goal state.
-
- 
 
             -------------
 
@@ -150,7 +92,7 @@ class EightPuzzleState:
 
             -------------
 
- 
+
 
         >>> EightPuzzleState([0, 1, 2, 3, 4, 5, 6, 7, 8]).isGoal()
 
@@ -186,7 +128,7 @@ class EightPuzzleState:
 
           Returns a list of legal moves from the current state.
 
- 
+
 
         Moves consist of moving the blank space up, down, left or right.
 
@@ -222,6 +164,8 @@ class EightPuzzleState:
 
         return moves
 
+
+
  
 
     def result(self, move):
@@ -232,7 +176,7 @@ class EightPuzzleState:
 
         updated based on the provided move.
 
- 
+
 
         The move should be a string drawn from a list returned by legalMoves.
 
@@ -240,7 +184,7 @@ class EightPuzzleState:
 
         exception.
 
- 
+
 
         NOTE: This function *does not* change the current object.  Instead,
 
@@ -278,7 +222,7 @@ class EightPuzzleState:
 
             raise "Illegal Move"
 
- 
+
 
         # Create a copy of the current eightPuzzle
 
@@ -294,11 +238,48 @@ class EightPuzzleState:
 
         newPuzzle.blankLocation = newrow, newcol
 
- 
+
 
         return newPuzzle
 
- 
+    # def result(self, move):
+    #     row, col = self.blankLocation
+    #     if move == 'up':
+    #         newrow = row - 1
+    #         newcol = col
+    #     elif move == 'down':
+    #         newrow = row + 1
+    #         newcol = col
+    #     elif move == 'left':
+    #         newrow = row
+    #         newcol = col - 1
+    #     elif move == 'right':
+    #         newrow = row
+    #         newcol = col + 1
+    #     else:
+    #         raise ValueError("Illegal Move")
+    #
+    #         # Create a copy of the current eightPuzzle
+    #
+    #     newPuzzle = EightPuzzleState([0, 0, 0, 0, 0, 0, 0, 0, 0])
+    #
+    #     newPuzzle.cells = [values[:] for values in self.cells]
+    #
+    #     # And update it to reflect the move
+    #
+    #     newPuzzle.cells[row][col] = self.cells[newrow][newcol]
+    #
+    #     newPuzzle.cells[newrow][newcol] = self.cells[row][col]
+    #
+    #     newPuzzle.blankLocation = newrow, newcol
+    #
+    #
+    #
+    #     return newPuzzle
+
+
+
+
 
     # Utilities for comparison and display
 
@@ -367,14 +348,9 @@ class EightPuzzleState:
             lines.append(horizontalLine)
 
         return '\n'.join(lines)
-
- 
-
     def __str__(self):
 
         return self.__getAsciiString()
-
- 
 
 # TODO: Implement The methods in this class
 
@@ -492,27 +468,6 @@ def loadEightPuzzle(puzzleNumber):
 
 def h1(state, problem=None):
 
-    """
-
-    Heuristic function h1 for the Eight Puzzle problem.
-
-    Computes the number of misplaced tiles.
-
- 
-
-    Args:
-
-    state: The current state of the puzzle.
-
-    problem: The EightPuzzleSearchProblem (optional, not used).
-
- 
-
-    Returns:
-
-    The number of misplaced tiles.
-
-    """
 
     goal_state = EightPuzzleState([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
@@ -535,20 +490,6 @@ def h1(state, problem=None):
  
 
 def h2(state, problem=None):
-
-    
-
-    """
-
-    A heuristic function estimates the cost from the current state to the nearest
-
-    goal in the provided SearchProblem. This heuristic calculates the sum of the
-
-    Euclidean distances of the tiles from their goal positions.
-
-    """
-
-    
 
     goal_positions = {
 
@@ -595,16 +536,6 @@ def h2(state, problem=None):
  
 
 def h3(state, problem=None):
-
-    """
-
-    A heuristic function estimates the cost from the current state to the nearest
-
-    goal in the provided SearchProblem. This heuristic calculates the sum of the
-
-    Manhattan distances of the tiles from their goal positions.
-
-    """
 
     goal_positions = {
 
@@ -654,15 +585,6 @@ def h3(state, problem=None):
 
 def h4(state, problem=None):
 
-    """
-
-    A heuristic function estimates the cost from the current state to the nearest
-
-    goal in the provided SearchProblem. This heuristic calculates the number of
-
-    tiles out of row plus the number of tiles out of column from their goal positions.
-
-    """
 
     goal_positions = {
 
@@ -720,19 +642,6 @@ def h4(state, problem=None):
 
 def createRandomEightPuzzle(moves=100):
 
-    """
-
-      moves: number of random moves to apply
-
- 
-
-      Creates a random eight puzzle by applying
-
-      a series of 'moves' random moves to a solved
-
-      puzzle.
-
-    """
 
     puzzle = EightPuzzleState([0,1,2,3,4,5,6,7,8])
 
@@ -754,17 +663,10 @@ if __name__ == '__main__':
 
     print(puzzle)
 
- 
 
     problem = EightPuzzleSearchProblem(puzzle)
 
-    path= search.aStarSearch(problem, problem.h2)    
-
-    """
-
-    path = search.breadthFirstSearch(problem)
-
-    """   
+    path = search.aStarSearch(problem, heuristic = h2)
 
     print('A* found a path of %d moves: %s' % (len(path), str(path)))
 

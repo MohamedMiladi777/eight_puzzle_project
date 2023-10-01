@@ -1,0 +1,5 @@
+Scenario,Heuristic,Depth,Expanded Nodes,Fringe Size
+1,h1,18,1703,4614
+1,h2,18,2242,6069
+1,h3,18,2750,7442
+1,h4,18,3419,9269

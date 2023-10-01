@@ -1,46 +1,115 @@
 
+import util
 
-# search.py
-# ---------
-# Licensing Information:  You are free to use or extend these projects for
-# educational purposes provided that (1) you do not distribute or publish
-# solutions, (2) you retain this notice, and (3) you provide clear
-# attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
-# Attribution Information: The Pacman AI projects were developed at UC Berkeley.
-# The core projects and autograders were primarily created by John DeNero
-# (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
-# Student side autograding was added by Brad Miller, Nick Hay, and
-# Pieter Abbeel (pabbeel@cs.berkeley.edu).
+import heapq
+
+# def astar_search(problem, heuristic=None):
+#     """
+#     A* search algorithm.
+#
+#     Args:
+#         problem: An instance of a search problem.
+#         heuristic: A heuristic function that estimates the cost to reach the goal from a given state (optional).
+#
+#     Returns:
+#         A list of actions that lead to the goal state, or None if no solution is found.
+#     """
+#     frontier = [(problem.getStartState(), [], 0)]  # Priority queue: (state, actions, cost)
+#     explored = set()
+#
+#     while frontier:
+#         state, actions, cost = frontier.pop(0)
+#
+#         if state in explored:
+#             continue
+#
+#         if problem.isGoalState(state):
+#             return actions
+#
+#         explored.add(state)
+#
+#         for successor, action, step_cost in problem.getSuccessors(state):
+#             if successor not in explored:
+#                 priority = cost + step_cost
+#                 if heuristic:
+#                     priority += heuristic(successor, problem)
+#                 frontier.append((successor, actions + [action], cost + step_cost))
+#                 frontier.sort(key=lambda x: x[2] + heuristic(x[0], problem))
+#
+#     return None  # No solution found
+# def astar_search(problem, heuristic=None):
+#     frontier = util.PriorityQueue()
+#     explored = set()
+#
+#     start_state = problem.getStartState()
+#     start_node = (start_state, [], 0)
+#
+#     frontier.push(start_node, 0)
+#
+#     while not frontier.isEmpty():
+#         state, actions, cost = frontier.pop()
+#
+#         if state in explored:
+#             continue
+#
+#         if problem.isGoalState(state):
+#             return actions
+#
+#         explored.add(state)
+#
+#         for successor, action, step_cost in problem.getSuccessors(state):
+#             if successor not in explored:
+#                 new_cost = cost + step_cost
+#                 if heuristic:
+#                     priority = new_cost + heuristic(successor, problem)
+#                 else:
+#                     priority = new_cost
+#                 frontier.push((successor, actions + [action], new_cost), priority)
+#
+#     return None
+def astar_search(problem, heuristic=None):
+    frontier = util.PriorityQueue()
+    explored = set()
+
+    start_state = problem.getStartState()
+    start_node = (start_state, [], 0)
+
+    frontier.push(start_node, 0)
+
+    while not frontier.isEmpty():
+        state, actions, cost = frontier.pop()
+
+        if problem.isGoalState(state):
+            return actions
+
+        if state not in explored:
+            explored.add(state)
+
+            for successor, action, step_cost in problem.getSuccessors(state):
+                new_cost = cost + step_cost
+                if successor not in explored:
+                    if heuristic:
+                        priority = new_cost + heuristic(successor, problem)
+                    else:
+                        priority = new_cost
+                    frontier.push((successor, actions + [action], new_cost), priority)
 
 
-"""
-In search.py, we implement generic search algorithms which are called by
-Pacman agents (in searchAgents.py).
-"""
 
-
-import util 
+# Example usage:
+# path = astar_search(problem, heuristic=h1)
 
 class SearchProblem:
-    """
-    This class outlines the structure of a search problem, but doesn't implement
-    any of the methods (in object-oriented terminology: an abstract class).
-    """
 
     def getStartState(self):
-        """
-        Returns the start state for the search problem.
-        """
+
         util.raiseNotDefined()
 
     def isGoalState(self, state):
-        """
-          state: Search state
 
-        Returns True if and only if the state is a valid goal state.
-        """
         util.raiseNotDefined()
+
+
 
     def getSuccessors(self, state):
         """
@@ -54,49 +123,58 @@ class SearchProblem:
         util.raiseNotDefined()
 
     def getCostOfActions(self, actions):
-        """
-         actions: A list of actions to take
 
-        This method returns the total cost of a particular sequence of actions.
-        The sequence must be composed of legal moves.
-        """
         util.raiseNotDefined()
 
 
 def tinyMazeSearch(problem):
-    """
-    Returns a sequence of moves that solves tinyMaze.  For any other maze, the
-    sequence of moves will be incorrect, so only use this for tinyMaze.
-    """
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+# def depthFirstSearch(problem):
+#
+#     #states to be explored (LIFO). holds nodes in form (state, action)
+#     frontier = util.Stack()
+#     #previously explored states (for path checking), holds states
+#     exploredNodes = []
+#     #define start node
+#     startState = problem.getStartState()
+#     startNode = (startState, [])
+#
+#     frontier.push(startNode)
+#
+#     while not frontier.isEmpty():
+#         #begin exploring last (most-recently-pushed) node on frontier
+#         currentState, actions = frontier.pop()
+#
+#         if currentState not in exploredNodes:
+#             #mark current node as explored
+#             exploredNodes.append(currentState)
+################Debugging, DFS TOO SLOW################
 def depthFirstSearch(problem):
-    """Search the deepest nodes in the search tree first."""
-
     #states to be explored (LIFO). holds nodes in form (state, action)
     frontier = util.Stack()
     #previously explored states (for path checking), holds states
-    exploredNodes = []
+    exploredNodes = set()  # Change this line
     #define start node
     startState = problem.getStartState()
     startNode = (startState, [])
-    
-    frontier.push(startNode)
-    
-    while not frontier.isEmpty():
-        #begin exploring last (most-recently-pushed) node on frontier
-        currentState, actions = frontier.pop()
-        
-        if currentState not in exploredNodes:
-            #mark current node as explored
-            exploredNodes.append(currentState)
 
-            if problem.isGoalState(currentState):
-                return actions
-            else:
+    frontier.push(startNode)
+
+    while not frontier.isEmpty():
+    #begin exploring last (most-recently-pushed) node on frontier
+        currentState, actions = frontier.pop()
+
+        if currentState not in exploredNodes:
+        #mark current node as explored
+                            exploredNodes.add(currentState)  # And this line
+
+        if problem.isGoalState(currentState):
+            return actions
+        else:
                 #get list of possible successor nodes in 
                 #form (successor, action, stepCost)
                 successors = problem.getSuccessors(currentState)
@@ -109,27 +187,47 @@ def depthFirstSearch(problem):
 
     return actions  
 
+# def breadthFirstSearch(problem):
+#
+#     #to be explored (FIFO)
+#     frontier = util.Queue()
+#
+#     #previously expanded states (for cycle checking), holds states
+#     exploredNodes = []
+#
+#     startState = problem.getStartState()
+#     startNode = (startState, [], 0) #(state, action, cost)
+#
+#     frontier.push(startNode)
+#
+#     while not frontier.isEmpty():
+#         #begin exploring first (earliest-pushed) node on frontier
+#         currentState, actions, currentCost = frontier.pop()
+#
+#         if currentState not in exploredNodes:
+#             #put popped node state into explored list
+#             exploredNodes.append(currentState)
+#Debugging, BFS TOO SLOW
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-
-    #to be explored (FIFO)
     frontier = util.Queue()
-    
+
     #previously expanded states (for cycle checking), holds states
-    exploredNodes = []
-    
+    exploredNodes = set()  # Change this line
+
     startState = problem.getStartState()
     startNode = (startState, [], 0) #(state, action, cost)
-    
+
     frontier.push(startNode)
-    
+
     while not frontier.isEmpty():
         #begin exploring first (earliest-pushed) node on frontier
         currentState, actions, currentCost = frontier.pop()
-        
+
         if currentState not in exploredNodes:
             #put popped node state into explored list
-            exploredNodes.append(currentState)
+            exploredNodes.add(currentState)  # And this line
+
+            # ... rest of your code ...
 
             if problem.isGoalState(currentState):
                 return actions
@@ -147,8 +245,6 @@ def breadthFirstSearch(problem):
     return actions
         
 def uniformCostSearch(problem):
-    """Search the node of least total cost first."""
-
     #to be explored (FIFO): holds (item, cost)
     frontier = util.PriorityQueue()
 
@@ -184,15 +280,10 @@ def uniformCostSearch(problem):
     return actions
 
 def nullHeuristic(state, problem=None):
-    """
-    A heuristic function estimates the cost from the current state to the nearest
-    goal in the provided SearchProblem.  This heuristic is trivial.
-    """
+
     return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-
     #to be explored (FIFO): takes in item, cost+heuristic
     frontier = util.PriorityQueue()
 
