@@ -1,36 +1,36 @@
 import math
 import search
 import random
-# class EightPuzzleState:
-#
-#     def __init__( self, numbers ):
-#
-#
-#         self.cells = []
-#
-#         numbers = numbers[:] # Make a copy so as not to cause side-effects.
-#
-#         numbers.reverse()
-#
-#         for row in range( 3 ):
-#
-#             self.cells.append( [] )
-#
-#             for col in range( 3 ):
-#
-#                 if numbers:
-#
-#                     self.cells[row].append(numbers.pop())
-#
-#                 else:
-#
-#                     raise ValueError("Not enough numbers provided for the puzzle!")
-#
-#
-#
-#                 if self.cells[row][col] == 0:
-#
-#                     self.blankLocation = row, col
+class EightPuzzleState:
+
+    def __init__( self, numbers ):
+
+
+        self.cells = []
+
+        numbers = numbers[:] # Make a copy so as not to cause side-effects.
+
+        numbers.reverse()
+
+        for row in range( 3 ):
+
+            self.cells.append( [] )
+
+            for col in range( 3 ):
+
+                if numbers:
+
+                    self.cells[row].append(numbers.pop())
+
+                else:
+
+                    raise ValueError("Not enough numbers provided for the puzzle!")
+
+
+
+                if self.cells[row][col] == 0:
+
+                    self.blankLocation = row, col
 
 # class EightPuzzleState:
 #     def __init__(self, numbers):
@@ -47,22 +47,22 @@ import random
 #
 #                 if self.cells[row][col] == 0:
 #                     self.blankLocation = row, col
-class EightPuzzleState:
-    def __init__(self, numbers):
-        if len(numbers) != 9:
-            raise ValueError("Exactly 9 numbers must be provided for the puzzle!")
-
-        self.cells = []
-        numbers = numbers[:]  # Make a copy so as not to cause side-effects.
-
-        for i in range(0, 9, 3):
-            self.cells.append(numbers[i:i+3])
-
-        # Find the location of the blank space (0)
-        for row in range(3):
-            for col in range(3):
-                if self.cells[row][col] == 0:
-                    self.blankLocation = row, col
+# class EightPuzzleState:
+#     def __init__(self, numbers):
+#         if len(numbers) != 9:
+#             raise ValueError("Exactly 9 numbers must be provided for the puzzle!")
+#
+#         self.cells = []
+#         numbers = numbers[:]  # Make a copy so as not to cause side-effects.
+#
+#         for i in range(0, 9, 3):
+#             self.cells.append(numbers[i:i+3])
+#
+#         # Find the location of the blank space (0)
+#         for row in range(3):
+#             for col in range(3):
+#                 if self.cells[row][col] == 0:
+#                     self.blankLocation = row, col
 
 
  

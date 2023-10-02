@@ -14,7 +14,7 @@ with open('scenarios.csv', 'r') as scenarios_file:
     scenarios = list(csv.reader(scenarios_file))
 
 # Open the results file
-with open('results.csv', 'w', newline='') as results_file:
+with open('BestSearchResults.csv', 'w', newline='') as results_file:
     results_writer = csv.writer(results_file)
 
     # Write the header row
