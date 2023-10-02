@@ -1,0 +1,9 @@
+Scenario,Strategy,Depth,Expanded nodes,Fringe size
+"[0, 3, 2, 1, 5, 8, 7, 6, 4]",depthFirstSearch,3004,3066,8609
+"[0, 3, 2, 1, 5, 8, 7, 6, 4]",breadthFirstSearch,22,80105,217909
+"[0, 3, 2, 1, 5, 8, 7, 6, 4]",aStarSearch,22,89509,243184
+"[1, 4, 2, 3, 5, 8, 0, 6, 7]",depthFirstSearch,3034,3099,8701
+"[1, 4, 2, 3, 5, 8, 0, 6, 7]",breadthFirstSearch,6,3183,8933
+"[1, 4, 2, 3, 5, 8, 0, 6, 7]",aStarSearch,6,3189,8950
+"[3, 5, 0, 6, 7, 2, 1, 4, 8]",depthFirstSearch,10000,12657,35119
+"[3, 5, 0, 6, 7, 2, 1, 4, 8]",breadthFirstSearch,20,50696,139937

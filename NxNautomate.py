@@ -2,15 +2,15 @@ import csv
 import search
 import random
 
-from NxNpuzzle import NPuzzleState, NPuzzleSearchProblem, h1, h2, h3, h4, createRandomNPuzzle, isSolvable
+from NxNpuzzle import NPuzzleState, NPuzzleSearchProblem, h1, h2, h3, h4, createRandomNPuzzle
 
 heuristics = [h1, h2, h3, h4]
 
-def createRandomSolvableNxNPuzzle(n, moves=100):
-    while True:
-        puzzle = createRandomNPuzzle(n, moves)
-        if isSolvable(puzzle):
-            return puzzle
+# def createRandomSolvableNxNPuzzle(n, moves=100):
+#     while True:
+#         puzzle = createRandomNPuzzle(n, moves)
+#         if isSolvable(puzzle):
+#             return puzzle
 
 def createRandomNxNPuzzle(n, moves=100):
     puzzle = NPuzzleState(n)
@@ -19,7 +19,7 @@ def createRandomNxNPuzzle(n, moves=100):
     return puzzle
 
 # Define the puzzle sizes
-puzzle_sizes = [3, 4, 5]  # You can add more sizes as needed
+puzzle_sizes = [4]  # You can add more sizes as needed
 
 # Open the results file and scenarios file
 with open('resultsNxN.csv', 'w', newline='') as results_file, open('scenariosNxN.csv', 'w', newline='') as scenarios_file:
